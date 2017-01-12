@@ -1,0 +1,51 @@
+---
+# Install Dx-toolkit
+- name: Get DX tarball
+  unarchive: 
+#    src: https://wiki.dnanexus.com/images/files/dx-toolkit-current-ubuntu-14.04-amd64.tar.gz 
+    src: "https://wiki.dnanexus.com/images/files/dx-toolkit-current-centos-amd64.tar.gz"
+    dest: /opt/
+    copy: no
+
+# http://stackoverflow.com/questions/22256884/not-possible-to-source-bashrc-with-ansible
+- name: Check dx version
+  shell: source /opt/dx-toolkit/environment  && dx --version
+  args:
+    executable: /bin/bash
+  register: dx_version
+
+- name: Print dx version
+  debug:
+    msg: "Dx-toolkit Version {{ dx_version.stdout }}"
+
+# Install Upload Agent
+- name: Create folder to house upload agent
+  file: path=/opt/dx-ua state=directory mode=0755
+
+- name: Download and unzip UA tarball
+  unarchive: 
+    src: "https://wiki.dnanexus.com/images/files/dnanexus-upload-agent-current-linux.tar.gz"
+    dest: /opt/dx-ua
+    copy: no
+
+- name: Move ua executable to un-versioned folder location for ease of reference
+  shell: mv /opt/dx-ua/*/* /opt/dx-ua/
+
+- name: check ua folder content
+  shell: ls /opt/dx-ua/
+  register: ua_folder_content
+
+- name: print ua folder content
+  debug:
+    msg: "Upload agent folder contains: {{ ua_folder_content.stdout }}"
+
+- name: Check installed UA version
+  command: ua --version
+  environment:
+    PATH: "/opt/dx-ua/:{{ ansible_env.PATH }}"
+  register: ua_version
+
+- name: Print installed UA version
+  debug:
+    msg: "Upload agent Version {{ ua_version.stdout }}"
+
