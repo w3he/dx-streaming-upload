@@ -6,6 +6,7 @@
     src: "https://wiki.dnanexus.com/images/files/dx-toolkit-current-centos-amd64.tar.gz"
     dest: /opt/
     copy: no
+    creates: /opt/dx-toolkit/environment
 
 # http://stackoverflow.com/questions/22256884/not-possible-to-source-bashrc-with-ansible
 - name: Check dx version
@@ -27,9 +28,12 @@
     src: "https://wiki.dnanexus.com/images/files/dnanexus-upload-agent-current-linux.tar.gz"
     dest: /opt/dx-ua
     copy: no
+    creates: /opt/dx-ua/ua
 
 - name: Move ua executable to un-versioned folder location for ease of reference
   shell: mv /opt/dx-ua/*/* /opt/dx-ua/
+  args:
+    creates: /opt/dx-ua/ua
 
 - name: check ua folder content
   shell: ls /opt/dx-ua/
