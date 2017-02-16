@@ -18,6 +18,7 @@
 - name: Print dx version
   debug:
     msg: "Dx-toolkit Version {{ dx_version.stdout }}"
+  when: dx_version.changed
 
 # Install Upload Agent
 - name: Create folder to house upload agent
@@ -42,6 +43,7 @@
 - name: print ua folder content
   debug:
     msg: "Upload agent folder contains: {{ ua_folder_content.stdout }}"
+  when: ua_folder_content.changed
 
 - name: Check installed UA version
   command: ua --version
@@ -52,4 +54,4 @@
 - name: Print installed UA version
   debug:
     msg: "Upload agent Version {{ ua_version.stdout }}"
-
+  when: ua_version.changed
