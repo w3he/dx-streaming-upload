@@ -1,30 +1,30 @@
 # Local directory for log file
 # Corresponds to -L parameter in incremental upload
-log_dir: '~/dnanexus/upload/LOGS'
+log_dir: {{ log_dir }}
 
 # Local directory for temp files
 # Corresponds to -t parameter in incremental upload
-tmp_dir: '~/dnanexus/upload/TMP'
+tmp_dir: {{ tmp_dir }}
 
 # Number of times to retry dx_sync_directory before quitting
 # default = 3; corresponds to -R parameter in incremental upload
-n_retries: 3
+n_retries: {{ n_retries }}
 
 # Expected duration of a sequencing run.
 # Corresponds to -D paramter in incremental upload
 # Acceptable suffix: s, m, h, d, w, M, y
-run_length: 24h
+run_length: {{ run_length }}
 
 # Number of intervals to wait for run to complete. If
 # the sequencing run has not completed within
 # n_seq_intervals * run_length, it will be deemed as aborted
 # and the program will not attempt to upload it
 # Correspond to the -I parameter in incremental upload
-n_seq_intervals: 2
+n_seq_intervals: {{ n_seq_intervals }}
 
 # Number of upload threads executed by Upload Agent (UA)
 # This number should be reduced (to as low as 1) for upload
 # sites with low upload bandwidth to increase chance
 # of successful uploads in spite of network disruptions
 # Corresponds to the -u option in UA and incremental_upload.py
-n_upload_threads: 8
+n_upload_threads: {{ n_upload_threads }}

@@ -1,5 +1,11 @@
 ---
 # defaults file for dx-streaming-upload
-
-mode: deploy
+mode: debug
 monitored_directory: ~/runs
+log_dir: ~/dnanexus/upload/LOGS
+tmp_dir: ~/dnanexus/upload/TMP
+n_retries: 3
+run_length: 24h
+n_seq_intervals: 2
+n_upload_threads: 2
+
