@@ -11,7 +11,7 @@ import sys
 import time
 import yaml
 
-# Whether to print verbose Debuggin messages
+# Whether to print verbose Debugging messages
 DEBUG = False
 
 # If upload is incomplete and local log has not been updated
@@ -35,7 +35,7 @@ CONFIG_DEFAULT = {
 }
 
 # Base folder in which the RUN folders are deposited
-# In our current setup, we assume the following folder strcuture
+# In our current setup, we assume the following folder structure
 # /
 #  - <RUN_ID>
 #      - runs (RUN folder tarball)
@@ -81,7 +81,7 @@ def parse_args():
                         help='Print verbose debugging messages',
                         action='store_true')
 
-    optionalNamed = parser.add_argument_group("Optional named arguemnts")
+    optionalNamed = parser.add_argument_group("Optional named arguments")
 
 
     optionalNamed.add_argument('--script', '-s',
@@ -337,6 +337,7 @@ def _trigger_streaming_upload(folder, config):
     command = ["python", inc_upload_script_loc,
                "-a", config['token'],
                "-p", config['project'],
+               "-f", RUN_UPLOAD_DEST,
                "-r", folder,
                "-t", config['tmp_dir'],
                "-L", config['log_dir'],

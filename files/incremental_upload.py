@@ -24,6 +24,8 @@ import json
 # By "synchronize" we mean that each invocation of dx_sync_directory.py will create a TAR
 # archive of all files in the run directory modified since the last invocation.
 
+
+
 def parse_args():
     """Parse the command-line arguments and canonicalize file path arguments"""
 
@@ -48,6 +50,11 @@ def parse_args():
             "will be stored.")
 
     # Optional inputs
+    # option to sync up root folder with RUN_UPLOAD_DEST what's in monitor_runs.py
+    parser.add_argument("-f", "--project-folder", metavar="<project folder>",
+            required=False, default="/",
+            help="Root folder in the project to upload run directory to, " +
+            "default to %(default)")
     parser.add_argument("-l", "--num-lanes", metavar="<2 or 8>", type=int,
             choices=[2, 8], help="Upload BCL files sorted by lane. Use this " +
             "option if you plan to run BCL conversion parallelized by lane. " +
@@ -222,7 +229,7 @@ def run_command_with_retry(my_num_retries, my_command):
 
 def raise_error(msg):
     print_stderr("ERROR: %s" % msg)
-    sys.exit()
+    sys.exit(1)
 
 def print_stderr(msg):
     print ("[incremental_upload.py] %s" % msg, file=sys.stderr)
@@ -295,11 +302,11 @@ def main():
     run_id = get_run_id(args.run_dir)
 
     # Set all naming conventions
-    REMOTE_RUN_FOLDER = "/" + run_id + "/runs"
-    REMOTE_READS_FOLDER = "/" + run_id + "/reads"
-    REMOTE_ANALYSIS_FOLDER = "/" + run_id + "/analyses"
+    REMOTE_RUN_FOLDER = args.project_folder.rstrip("/") + "/" + run_id + "/runs"
+    REMOTE_READS_FOLDER = args.project_folder.rstrip("/") + "/" + run_id + "/reads"
+    REMOTE_ANALYSIS_FOLDER = args.project_folder.rstrip("/") + "/" + run_id + "/analyses"
 
-    FILE_PREFIX = "run." + run_id+ ".lane."
+    FILE_PREFIX = "run." + run_id + ".lane."
 
     # Prep log & record names
     lane_info = []
@@ -354,7 +361,7 @@ def main():
 
     if done_count == len(lane_info):
         print_stderr("EXITING: All lanes already uploaded")
-        sys.exit(1)
+        sys.exit(0)
 
     seconds_to_wait = (dxpy.utils.normalize_timedelta(args.run_duration) / 1000 * args.intervals_to_wait)
     print_stderr("Maximum allowable time for run to complete: %d seconds." %seconds_to_wait)
