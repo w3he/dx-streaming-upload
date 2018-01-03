@@ -1,9 +1,9 @@
 ---
 
-- include: install.yml
+- import_tasks: install.yml
   tags: dx_install
 
-#- include: setup.yml
+#- import_tasks: setup.yml
 #  tags: dx_setup
 
 # vi:ts=2:sw=2:et:ft=yaml
